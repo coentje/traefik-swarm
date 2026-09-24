@@ -51,7 +51,7 @@ jobs:
       env:
         SSH_HOST: ${{ secrets.DOCKER_SSH_HOST }}
         SSH_PRIVATE_KEY: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-        DEPLOY_PATH: /home/GitHub/deployment/system
+        DEPLOY_PATH: /home/github/deployment/system
         STACK_FILE: docker-compose.yml
         STACK_NAME: system
         KEEP_FILES: 5
@@ -86,7 +86,7 @@ jobs:
         echo "--- Deploy ---------------------------------------------------------"
         STAMP="$(date +%Y%m%d%H%M%S)"
         REMOTE_STACK="$DEPLOY_PATH/stacks/docker-stack-$STAMP.yaml"
-
+        # echo "mkdir -p $DEPLOY_PATH/stacks $DEPLOY_PATH/build"
         run_ssh "mkdir -p $DEPLOY_PATH/stacks $DEPLOY_PATH/build"
         put "$STACK_FILE" "$REMOTE_STACK"
         run_ssh "ls -t $DEPLOY_PATH/stacks/docker-stack-* 2>/dev/null | sed -e 1,$((KEEP_FILES + 1))d | xargs -r rm -- 2>/dev/null || true"
