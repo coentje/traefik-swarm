@@ -78,11 +78,12 @@ jobs:
           -o "ControlPath=$SSH_DIR/cm-%r@%h-%p"
           -o ControlPersist=300
         )
-
+        echo $SSH_HOST
+        echo $SSH_OPTS
         run_ssh() { ssh "${SSH_OPTS[@]}" "$SSH_HOST" "$1"; }
         put() { scp "${SSH_OPTS[@]}" "$1" "$SSH_HOST:$2"; }
 
-        # --- Deploy ---------------------------------------------------------
+        echo "--- Deploy ---------------------------------------------------------"
         STAMP="$(date +%Y%m%d%H%M%S)"
         REMOTE_STACK="$DEPLOY_PATH/stacks/docker-stack-$STAMP.yaml"
 
