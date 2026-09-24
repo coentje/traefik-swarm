@@ -51,7 +51,7 @@ jobs:
       env:
         SSH_HOST: ${{ secrets.DOCKER_SSH_HOST }}
         SSH_PRIVATE_KEY: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-        DEPLOY_PATH: /home/github/deployment/system
+        DEPLOY_PATH: /home/GitHub/deployment/system
         STACK_FILE: docker-compose.yml
         STACK_NAME: system
         KEEP_FILES: 5
@@ -61,13 +61,13 @@ jobs:
         # --- SSH setup ------------------------------------------------------
         SSH_DIR="$HOME/.ssh"
         mkdir -p "$SSH_DIR"
-        printf '%s\n' "$SSH_PRIVATE_KEY" > "$SSH_DIR/id_ed25519"
-        chmod 600 "$SSH_DIR/id_ed25519"
+        printf '%s\n' "$SSH_PRIVATE_KEY" > "$SSH_DIR/id_rsa"
+        chmod 600 "$SSH_DIR/id_rsa"
 
         # Single shared TCP connection for all commands (one handshake, reused
         # for ssh and scp via ControlPath).
         SSH_OPTS=(
-          -i "$SSH_DIR/id_ed25519"
+          -i "$SSH_DIR/id_rsa"
           -o BatchMode=yes
           -o IdentitiesOnly=yes
           -o StrictHostKeyChecking=no
