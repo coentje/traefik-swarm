@@ -92,10 +92,9 @@ jobs:
         run_ssh "ls -t $DEPLOY_PATH/stacks/docker-stack-* 2>/dev/null | sed -e 1,$((KEEP_FILES + 1))d | xargs -r rm -- 2>/dev/null || true"
         run_ssh "ln -nfs $REMOTE_STACK $DEPLOY_PATH/build/$STACK_FILE"
         # Create build-context dirs referenced by the stack file (docker-compose config requires them to exist).
-        run_ssh "head -n 1 $DEPLOY_PATH/build/$STACK_FILE"
         run_ssh "cd $DEPLOY_PATH/build && egrep '    (context:|build)' < $STACK_FILE | sed -E 's/\s+\S+:\s*//' | xargs mkdir -p ."
         put ".env" "$DEPLOY_PATH/build/.env"
-        run_ssh "head -n 1 $DEPLOY_PATH/build/$STACK_FILE"
+        run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && docker-compose -f $STACK_FILE config"
         run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && docker-compose -f $STACK_FILE config 2>/dev/null | docker stack deploy --with-registry-auth -c - $STACK_NAME"
         run_ssh "head -n 1 $DEPLOY_PATH/build/$STACK_FILE"
         ssh "${SSH_OPTS[@]}" -O exit "$SSH_HOST" 2>/dev/null || true
