@@ -94,7 +94,7 @@ jobs:
         # Create build-context dirs referenced by the stack file (docker-compose config requires them to exist).
         run_ssh "cd $DEPLOY_PATH/build && egrep '    (context:|build)' < $STACK_FILE | sed -E 's/\s+\S+:\s*//' | xargs mkdir -p ."
         put ".env" "$DEPLOY_PATH/build/.env"
-        run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && set -a; . ./.env; set +a && docker stack deploy --with-registry-auth -c $STACK_FILE - $STACK_NAME"
+        run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && set -a; . ./.env; set +a && docker stack deploy --with-registry-auth -c $STACK_FILE $STACK_NAME"
         # run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && printenv && docker stack config -c $STACK_FILE 2>/dev/null | docker stack deploy --with-registry-auth -c - $STACK_NAME"
         # run_ssh "cd $DEPLOY_PATH/build && chmod 600 .env && source .env && docker stack deploy --with-registry-auth -c $STACK_FILE $STACK_NAME"
         run_ssh "head -n 1 $DEPLOY_PATH/build/$STACK_FILE"
