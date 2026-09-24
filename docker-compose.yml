@@ -39,6 +39,9 @@ services:
         - traefik.http.routers.traefik-dashboard-https.service=api@internal
         - traefik.http.routers.traefik-dashboard-https.middlewares=admin-auth
         - traefik.http.services.traefik-dashboard-https.loadbalancer.server.port=8080
+        - traefik.http.routers.api.tls.domains[0].main=${DOMAIN?Variable not set}
+        - traefik.http.routers.api.tls.domains[0].sans=*.${DOMAIN?Variable not set}
+        - traefik.http.routers.api.tls.certResolver=bunny
     volumes:
       - /etc/localtime:/etc/localtime:ro
       # Add Docker as a mounted volume, so that Traefik can read the labels of other services
@@ -69,11 +72,13 @@ services:
       #- --certificatesresolvers.le.acme.email=${LETSENCRYPT_EMAIL?Variable not set}
       
       - --entrypoints.websecure.http.tls.certresolver=bunny
-      - --certificatesresolvers.bunny.acme.email=${LETSENCRYPT_EMAIL?Variable not set}
-      - --certificatesresolvers.bunny.acme.tlschallenge=true
-      - --certificatesresolvers.bunny.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.bunny.acme.dnschallenge=true
       - --certificatesresolvers.bunny.acme.dnsChallenge.provider=bunny
-      
+      - --certificatesresolvers.bunny.acme.email=${LETSENCRYPT_EMAIL?Variable not set}
+      - --certificatesresolvers.bunny.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.bunny.acme.dnschallenge.disablepropagationcheck=true
+      - --certificatesresolvers.bunny.acme.dnschallenge.resolvers[0]=1.1.1.1:53
+      - --certificatesresolvers.bunny.acme.dnschallenge.resolvers[1]=8.8.8.8:53
       # Store the Let's Encrypt certificates in the mounted volume
       - --certificatesresolvers.bunny.acme.storage=/certificates/acme.json
       # Enable the access log, with HTTP requests
