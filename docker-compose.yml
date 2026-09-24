@@ -114,7 +114,7 @@ services:
         - traefik.http.routers.registry-http.middlewares=https5000-redirect
         - traefik.http.routers.registry-https.rule=Host(`${REGISTRY_DOMAIN?Variable not set}`)
         - traefik.http.routers.registry-https.entrypoints=https5000
-        - traefik.http.routers.registry-https.tls=true
+        
         - traefik.http.routers.registry-https.tls.certresolver=bunny
         - traefik.http.routers.registry-https.middlewares=registry-auth
         - traefik.http.services.registry.loadbalancer.server.port=5000
