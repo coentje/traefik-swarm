@@ -75,7 +75,7 @@ services:
       - --certificatesresolvers.bunny.acme.dnsChallenge.provider=bunny
       
       # Store the Let's Encrypt certificates in the mounted volume
-      - --certificatesresolvers.le.acme.storage=/certificates/acme.json
+      - --certificatesresolvers.bunny.acme.storage=/certificates/acme.json
       # Enable the access log, with HTTP requests
       - --accesslog
       # Enable the Traefik log, for configurations and errors
